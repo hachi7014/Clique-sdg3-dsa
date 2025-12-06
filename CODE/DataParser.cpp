@@ -4,14 +4,36 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <limits> // For cin.ignore in error handling
-#include <stdexcept> // For std::stoi error handling
-
-// NOTE: You would typically define constructors/destructors here, 
-// but we will focus on the two main functions you need.
+#include <limits>
+#include <stdexcept> 
 
 // ------------------------------------------------------------------
-// 1. Implementation of the loadData function (FR1 - Prelim DSA)
+// FIX 1: Implement the Constructor
+// Purpose: Initialize the Linked List head to ensure it starts empty.
+// ------------------------------------------------------------------
+DataParser::DataParser() {
+    head = nullptr;
+}
+
+// ------------------------------------------------------------------
+// FIX 2: Implement the Destructor
+// Purpose: Prevent memory leaks by deleting all nodes in the list.
+// ------------------------------------------------------------------
+DataParser::~DataParser() {
+    Node* current = head;
+    Node* next;
+    
+    while (current != nullptr) {
+        next = current->next; // Store the next node before deleting
+        delete current;      // Delete the current node
+        current = next;      // Move to the next node
+    }
+    head = nullptr; // Ensure head is null after cleanup
+    // std::cout << "DataParser: Linked List successfully destroyed." << std::endl; // Optional debug message
+}
+
+// ------------------------------------------------------------------
+// 3. Implementation of the loadData function (FR1 - Prelim DSA)
 // ------------------------------------------------------------------
 void DataParser::loadData(const std::string& filename) {
     std::ifstream file(filename);
@@ -55,7 +77,7 @@ void DataParser::loadData(const std::string& filename) {
                 head = newNode;
                 
             } catch (const std::exception& e) {
-                // NFR2: Robustness - Handles potential stoi errors if volume isn't a number
+                // NFR2: Robustness - Handles potential stoi errors
                 std::cerr << "Data integrity error detected: " << e.what() << " on line: " << line << std::endl;
             }
         }
@@ -65,7 +87,8 @@ void DataParser::loadData(const std::string& filename) {
 }
 
 // ------------------------------------------------------------------
-// 2. Implementation of the getParsedData function (MUST be defined separately)
+// 4. Implementation of the getParsedData function
+// Purpose: Converts the Linked List data into a vector for the Min Heap.
 // ------------------------------------------------------------------
 std::vector<BloodUnit> DataParser::getParsedData() const {
     std::vector<BloodUnit> units;
@@ -78,6 +101,3 @@ std::vector<BloodUnit> DataParser::getParsedData() const {
     }
     return units;
 }
-
-// NOTE: Remember to implement the DataParser constructor (to set head = nullptr)
-// and the destructor (to delete all nodes and prevent memory leaks).
