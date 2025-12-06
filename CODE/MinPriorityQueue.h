@@ -1,87 +1,55 @@
-#include "MinPriorityQueue.h"
-#include <algorithm> // for std::swap
+#ifndef MINPRIORITYQUEUE_H
+#define MINPRIORITYQUEUE_H
 
-// ------------------------------------------------------------------
-// CRITICAL LOGIC: Determines Priority based on ExpirationDate
-// If dateA is EARLIER (closer to today) than dateB, dateA has higher priority.
-// Since the dates are in YYYY-MM-DD format, string comparison works directly!
-// ------------------------------------------------------------------
-bool MinPriorityQueue::isEarlier(const std::string& dateA, const std::string& dateB) const {
-    // If dateA (e.g., 2025-12-10) is less than dateB (e.g., 2025-12-15), 
-    // it means dateA is EARLIER, so dateA is the higher priority (smaller in Min Heap).
-    return dateA < dateB;
-}
+#include <vector>
+#include <string>
+#include <iostream>
+#include <stdexcept> 
+#include "BloodUnit.h" // Needed to store BloodUnit objects
 
-// ------------------------------------------------------------------
-// Core O(log n) Insertion Logic
-// ------------------------------------------------------------------
-void MinPriorityQueue::insert(const BloodUnit& unit) {
-    // 1. Add the new element to the end of the vector. (O(1))
-    heap.push_back(unit);
+class MinPriorityQueue {
+private:
+    // The heap is implemented using a vector (array implementation)
+    std::vector<BloodUnit> heap;
 
-    // 2. Restore the Min Heap property by bubbling up the new element. (O(log n))
-    heapifyUp(heap.size() - 1);
-}
+    // Helper Function Prototypes
+    // Used to compare dates for priority: returns true if dateA is earlier (higher priority)
+    bool isEarlier(const std::string& dateA, const std::string& dateB) const;
 
-// ------------------------------------------------------------------
-// Core O(log n) Extraction Logic
-// ------------------------------------------------------------------
-BloodUnit MinPriorityQueue::extractMin() {
-    if (isEmpty()) {
-        throw std::runtime_error("Heap is empty. Cannot extract minimum.");
+    // Maintains the Min Heap property after insertion (O(log n))
+    void heapifyUp(int index);
+    
+    // Maintains the Min Heap property after extraction (O(log n))
+    void heapifyDown(int index);
+
+    // Helper functions for array indices
+    int parent(int i) { return (i - 1) / 2; }
+    int leftChild(int i) { return (2 * i) + 1; }
+    int rightChild(int i) { return (2 * i) + 2; }
+
+public:
+    MinPriorityQueue() {}
+
+    // Core O(log n) Operations
+    void insert(const BloodUnit& unit);
+    BloodUnit extractMin();
+
+    // ------------------------------------------------------------------
+    // Final Logic: PeekMin (Defined inline in the header)
+    // Used for Menu Option 3 in main.cpp.
+    // ------------------------------------------------------------------
+    BloodUnit peekMin() const { 
+        if (isEmpty()) {
+            // Robustness check (NFR2)
+            throw std::runtime_error("Heap is empty. Cannot peek."); 
+        }
+        // The highest priority item (closest to expiration) is always at the root (index 0).
+        return heap[0]; 
     }
 
-    // 1. The highest priority item (closest to expiration) is at the root.
-    BloodUnit minUnit = heap[0];
+    // Status Checkers
+    bool isEmpty() const { return heap.empty(); }
+    int getSize() const { return heap.size(); }
+};
 
-    // 2. Move the last item to the root position. (O(1))
-    heap[0] = heap.back();
-
-    // 3. Remove the last item (the copy). (O(1))
-    heap.pop_back();
-
-    // 4. Restore the Min Heap property by bubbling down the new root. (O(log n))
-    if (!isEmpty()) {
-        heapifyDown(0);
-    }
-
-    return minUnit;
-}
-
-
-// ------------------------------------------------------------------
-// Min Heap Maintenance Functions (O(log n))
-// ------------------------------------------------------------------
-void MinPriorityQueue::heapifyUp(int index) {
-    // While the current node is not the root AND its expiration date is earlier 
-    // (higher priority) than its parent's expiration date:
-    while (index > 0 && isEarlier(heap[index].ExpirationDate, heap[parent(index)].ExpirationDate)) {
-        // Swap the child with the parent
-        std::swap(heap[index], heap[parent(index)]);
-        
-        // Move up to the parent's index
-        index = parent(index);
-    }
-}
-
-void MinPriorityQueue::heapifyDown(int index) {
-    int smallest = index;
-    int left = leftChild(index);
-    int right = rightChild(index);
-
-    // Check if the left child is smaller/earlier than the current node
-    if (left < heap.size() && isEarlier(heap[left].ExpirationDate, heap[smallest].ExpirationDate)) {
-        smallest = left;
-    }
-
-    // Check if the right child is smaller/earlier than the current smallest node
-    if (right < heap.size() && isEarlier(heap[right].ExpirationDate, heap[smallest].ExpirationDate)) {
-        smallest = right;
-    }
-
-    // If the smallest node is not the current node, swap and continue heapifying down
-    if (smallest != index) {
-        std::swap(heap[index], heap[smallest]);
-        heapifyDown(smallest);
-    }
-}
+#endif // MINPRIORITYQUEUE_H
