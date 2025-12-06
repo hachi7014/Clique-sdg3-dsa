@@ -1,34 +1,35 @@
 #ifndef DATAPARSER_H
 #define DATAPARSER_H
 
-#include "BloodUnit.h" // Must include the BloodUnit class to store its objects
-#include <fstream>
-#include <iostream>
-#include <sstream>
+#include <string>
 #include <vector>
+#include "BloodUnit.h" // Needed to store BloodUnit objects
 
-// 1. The Node Structure (The Link)
+// --- 1. Define the Linked List Node Structure ---
+// This is the structure that holds the data (BloodUnit) and the pointer to the next item.
 struct Node {
-    BloodUnit data; // This node holds one BloodUnit object
-    Node* next;     // Pointer to the next node in the list
+    BloodUnit data;
+    Node* next;
 
-    // Constructor for the Node
     Node(const BloodUnit& unit) : data(unit), next(nullptr) {}
 };
 
-// 2. The DataParser Class (The Linked List Manager)
+// --- 2. Define the DataParser Class ---
 class DataParser {
 private:
-    Node* head; // The start of the list
-    
-public:
-    DataParser(); // Constructor
-    ~DataParser(); // Destructor (to clean up memory)
+    Node* head; // Head pointer for the Singly Linked List
 
-    // Function to read the file and build the list
-    void loadData(const std::string& filename); 
-    
-    // Function to retrieve the parsed data for the Min Heap
+public:
+    // ------------------------------------------------------------------
+    // CRITICAL: DECLARATIONS for the functions that were missing definitions!
+    // ------------------------------------------------------------------
+    DataParser();  // Constructor (Initializes head = nullptr)
+    ~DataParser(); // Destructor (Deletes all nodes to prevent memory leaks)
+
+    // Core functionality (FR1)
+    void loadData(const std::string& filename);
+
+    // Required for Integration: Converts Linked List data into a vector
     std::vector<BloodUnit> getParsedData() const;
 };
 
