@@ -57,17 +57,13 @@ The system applies three core Data Structures to balance **efficiency**, **speed
 ---
 
 ###  Clone the Repository
-
-```bash
 git clone [YOUR GITHUB REPO URL HERE]
 cd Clique-sdg3-dsa
 
 ### Compile the Program
-```bash
 g++ CODE/main.cpp CODE/DataParser.cpp CODE/MinPriorityQueue.cpp CODE/InventorySearch.cpp CODE/BloodUnit.cpp -o project_bdms
 
 ### Running the Application
-```bash
 ./project_bdms
 
 ---
@@ -91,10 +87,10 @@ To verify that the priority queue is functioning correctly:
 ---
 
 ### Project Contributors
-| Name                              | Primary Role / Module                                                                         |
-| --------------------------------- | --------------------------------------------------------------------------------------------- |
-| **Roldan, Christian Maverick Z.** | BloodUnit, MinPriorityQueue, DataParser, InventorySearch, Documentation Lead, Flowchart Lead  |
-| **Musngi, Trishia**               | InventorySearch (Binary Search), DataParser (Linked List), Flowchart Design, Documentation    |
-| **Comcom, John Vincent**          | MinPriorityQueue (Min Heap), InventorySearch (Binary Search), Flowchart Design, Documentation |
-| **Nivales, Ande Jexer**           | InventorySearch (Binary Search), DataParser (Linked List), Flowchart Design, Documentation    |
-| **Soriano, Mak**                  | InventorySearch (Binary Search), MinPriorityQueue (Min Heap), Flowchart Design, Documentation |
+| Name | Primary Role / Module |
+| :--- | :--- |
+| **Roldan, Christian Maverick Z.** | Lead Integrator, **MinPriorityQueue (Min Heap) Logic**, Final Testing/Debugging |
+| **Musngi, Trishia** | **DataParser (Linked List) Implementation**, SDAD Design/Formatting |
+| **Comcom, John Vincent** | **InventorySearch (Binary Search) Implementation**, Flowchart Design/Diagram |
+| **Nivales, Ande Jexer** | **BloodUnit Class Implementation**, README/Usage Documentation |
+| **Soriano, Mak** | **Input/Output Handling & Menu Logic (main.cpp)**, Final Data Validation |
